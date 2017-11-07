@@ -5,5 +5,11 @@
 </head>
 <body>
     <!-- Add your EJS code here -->
+    <ul><% for(element in urls) { %>
+      <li><%= element %></li>
+      <li><%= urls[element] %></li>
+    <% } %>
+    <a href="example.com">Shortening a new URL</a>
+</ul>
 </body>
 </html>
