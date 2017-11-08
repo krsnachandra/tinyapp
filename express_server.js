@@ -31,6 +31,13 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+app.post("/urls/:id/delete", (req, res) => {
+  console.log([req.params.id]);  // debug statement to see POST parameters
+  delete urlDatabase[req.params.id];
+  console.log(urlDatabase);
+  res.redirect(`http://localhost:8080/urls`);
+});
+
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });

@@ -7,10 +7,13 @@
 <body>
     <% include partials/_header %>
     <ul><% for(element in urls) { %>
-      <li><%= element %></li>
-      <li><%= urls[element] %></li>
+      <li><%= element + ": " %><%= urls[element] %>
+        <form method="POST" action=<%= `/urls/${element}/delete` %>>
+          <input type="submit" value="Delete">
+        </form>
+      </li>
     <% } %>
-    <a href="example.com">Shortening a new URL</a>
+    <a href="/urls/new">Shortening a new URL</a>
 </ul>
 </body>
 </html>
