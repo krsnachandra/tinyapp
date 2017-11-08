@@ -32,9 +32,9 @@ app.get("/urls", (req, res) => {
 });
 
 app.post("/urls/:id/delete", (req, res) => {
-  console.log([req.params.id]);  // debug statement to see POST parameters
+  // console.log([req.params.id]);  // debug statement to see POST parameters
   delete urlDatabase[req.params.id];
-  console.log(urlDatabase);
+  // console.log(urlDatabase);
   res.redirect(`http://localhost:8080/urls`);
 });
 
@@ -65,10 +65,10 @@ app.get("/u/:id", (req, res) => {
 
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // debug statement to see POST parameters
+  // console.log(req.body);  // debug statement to see POST parameters
   let shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
-  console.log(urlDatabase);
+  // console.log(urlDatabase);
   res.redirect(`http://localhost:8080/urls/${shortURL}`);
 });
 
