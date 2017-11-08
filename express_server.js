@@ -35,7 +35,7 @@ app.post("/urls/:id/delete", (req, res) => {
   // console.log([req.params.id]);  // debug statement to see POST parameters
   delete urlDatabase[req.params.id];
   // console.log(urlDatabase);
-  res.redirect(`http://localhost:8080/urls`);
+  res.redirect("/urls/");
 });
 
 app.get("/urls/new", (req, res) => {
@@ -56,7 +56,7 @@ app.post("/urls/:id", (req, res) => {
   // console.log(req.body);
   urlDatabase[req.params.id] = req.body.longURL;
   // console.log(urlDatabase);
-  res.redirect(`http://localhost:8080/urls`);
+  res.redirect("/urls/");
 });
 
 app.get("/u/:id", (req, res) => {
