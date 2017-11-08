@@ -3,8 +3,9 @@
 <head>
   <title>TinyApp</title>
 </head>
+
 <body>
-    <!-- Add your EJS code here -->
+    <% include partials/_header %>
     <ul><% for(element in urls) { %>
       <li><%= element %></li>
       <li><%= urls[element] %></li>
