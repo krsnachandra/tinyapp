@@ -50,6 +50,7 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+// Below is where the update magic happens:
 app.post("/urls/:id", (req, res) => {
   // console.log(req.params.id);  // debug statement to see POST parameters
   // console.log(req.body);
