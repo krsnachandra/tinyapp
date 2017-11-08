@@ -6,6 +6,11 @@
 <body>
     <% include partials/_header %>
     <p><a href="<%= longURL %>"><%= longURL %></a></p>
-    <p><%= shortURL %></p>
+    <p>Short URL: <%= shortURL %></p>
+    <form method="POST" action=<%= `/urls/${shortURL}` %>>
+      <label for="longURL">Enter the updated URL:</label>
+      <input id="longURL" type="text" name="longURL" placeholder=<%= longURL %> style="width: 300px">
+      <input type="submit" value="Update">
+    </form>
 </body>
 </html>

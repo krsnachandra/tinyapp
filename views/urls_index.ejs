@@ -6,9 +6,9 @@
 
 <body>
     <% include partials/_header %>
-    <ul><% for(element in urls) { %>
-      <li><%= element + ": " %><%= urls[element] %>
-        <form method="POST" action=<%= `/urls/${element}/delete` %>>
+    <ul><% for(shortURL in urls) { %>
+      <li><%= shortURL + ": " %><%= urls[shortURL] %> <a href=<%= `/urls/${shortURL}` %>>Edit</a>
+        <form method="POST" action=<%= `/urls/${shortURL}/delete` %>>
           <input type="submit" value="Delete">
         </form>
       </li>

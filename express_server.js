@@ -50,6 +50,14 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+app.post("/urls/:id", (req, res) => {
+  // console.log(req.params.id);  // debug statement to see POST parameters
+  // console.log(req.body);
+  urlDatabase[req.params.id] = req.body.longURL;
+  // console.log(urlDatabase);
+  res.redirect(`http://localhost:8080/urls`);
+});
+
 app.get("/u/:id", (req, res) => {
   let longURL = urlDatabase[req.params.id];
   res.redirect(longURL);
