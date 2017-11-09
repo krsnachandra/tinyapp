@@ -59,6 +59,15 @@ app.post("/urls/login", (req, res) => {
   res.redirect("/urls");
 });
 
+//Logout
+app.post("/urls/logout", (req, res) => {
+  // console.log(req.body);
+  // console.log(req.params);
+  // console.log(req.body.username);
+  res.clearCookie("username");
+  res.redirect("/urls");
+});
+
 app.post("/urls/:id/delete", (req, res) => {
   // console.log([req.params.id]);  // debug statement to see POST parameters
   delete urlDatabase[req.params.id];
