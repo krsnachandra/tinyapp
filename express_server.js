@@ -59,7 +59,7 @@ app.post("/urls/login", (req, res) => {
   res.redirect("/urls");
 });
 
-//Logout
+//Logout req.session = null
 app.post("/urls/logout", (req, res) => {
   // console.log(req.body);
   // console.log(req.params);
@@ -76,13 +76,14 @@ app.post("/urls/:id/delete", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  res.render("urls_new", { username: req.cookies['username']});
 });
 
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id]
+    longURL: urlDatabase[req.params.id],
+    username: req.cookies['username']
   };
   res.render("urls_show", templateVars);
 });
