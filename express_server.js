@@ -10,6 +10,18 @@ const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+const users = {
+  "1": {
+    id: "1",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "2": {
+    id: "2",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+};
 function generateRandomString() {
   var string = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
