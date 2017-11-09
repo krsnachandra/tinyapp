@@ -5,26 +5,20 @@
 </head>
 <body>
     <!-- Add your EJS code here -->
-    <% if(!username) { %>
-      <form method="POST" action="/register">
 
-        <label for="username">Create a user name:</label>
-        <input id="username" type="text" name="username" placeholder="username" style="width: 300px">
+  <form method="POST" action="/register">
 
-        <label><b>Email</b></label>
-        <input type="email" placeholder="Enter Email" name="email" >
+    <label for="username">Create a user name:</label>
+    <input id="username" type="text" name="username" placeholder="username" style="width: 300px">
 
-        <label><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" >
+    <label><b>Email</b></label>
+    <input type="email" placeholder="Enter Email" name="email" >
 
-        <input type="submit" value="Register">
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="password" >
 
-      </form>
-    <% } else { %>
-    <p>Hello <%= username %></p>
-      <form method="POST" action="/urls/logout">
-        <input type="submit" value="Logout">
-      </form>
-    <% } %>
+    <input type="submit" value="Register">
+
+  </form>
 </body>
 </html>

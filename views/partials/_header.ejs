@@ -4,19 +4,19 @@
   <title>TinyApp</title>
 </head>
 <body>
-    <!-- Add your EJS code here -->
-    <% if(!username) { %>
-      <form method="POST" action="/urls/login">
-        <label for="username">Sign in with a user name:</label>
-        <input id="username" type="text" name="username" placeholder="username" style="width: 300px">
-        <input type="submit" value="Set Username">
-      </form>
-    <% } else { %>
-    <p>Hello <%= username %></p>
-      <form method="POST" action="/urls/logout">
-        <input type="submit" value="Logout">
-      </form>
-    <% } %>
+  <!-- Add your EJS code here -->
+  <% if (!user) { %>
+    <form method="POST" action="/urls/login">
+      <label for="username">Sign in with a user name:</label>
+      <input id="username" type="text" name="username" placeholder="username" style="width: 300px">
+      <input type="submit" value="Set Username">
+    </form>
+  <% } else { %>
+    <p>Hello <%= user.username %></p>
+    <form method="POST" action="/urls/logout">
+      <input type="submit" value="Logout">
+    </form>
+  <% } %>
 </body>
 </html>
 
