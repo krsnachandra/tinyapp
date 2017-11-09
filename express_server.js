@@ -42,6 +42,15 @@ function emailInUsers(passedEmail){
     }
   }
 }
+
+function findUserByEmail(passedEmail){
+    for (let userID in users) {
+    // console.log(users[userID].email);
+    if (users[userID].email === passedEmail) {
+      return users[userID];
+    }
+  }
+}
 // console.log(findUserByEmail("user2@example.com"));
 
 
@@ -112,11 +121,18 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  // console.log(req.body);
-  // console.log(req.params);
-  // console.log(req.body.username);
-  res.cookie("username", req.body.username);
-  res.redirect("/urls");
+  const { username, email, password } = req.body;
+  if (!emailInUsers(email)) {
+    res.status(403).send('403: user with that e-mail cannot be found');
+  } else {
+    let user = findUserByEmail(email);
+    if (password !== user.password) {
+      res.status(403).send('403: password does not match');
+    } else {
+      res.cookie("user_id", user.id);
+      res.redirect("/urls");
+    }
+  }
 });
 
 //Logout req.session = null
@@ -124,7 +140,7 @@ app.post("/urls/logout", (req, res) => {
   // console.log(req.body);
   // console.log(req.params);
   // console.log(req.body.username);
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect("/urls");
 });
 
