@@ -23,14 +23,28 @@ const users = {
   }
 };
 function generateRandomString() {
-  var string = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let string = "";
+  const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-  for (var i = 0; i < 6; i++)
+  for (let i = 0; i < 6; i++)
     string += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return string;
 }
+
+
+
+function emailInUsers(passedEmail){
+  for (let userID in users) {
+    // console.log(users[userID].email);
+    if (users[userID].email === passedEmail) {
+      return true;
+    }
+  }
+}
+// console.log(findUserByEmail("user2@example.com"));
+
+
 
 // Configuration
 app.set("view engine", "ejs");
@@ -64,16 +78,24 @@ app.get("/register", (req, res) => {
 
 // Register
 app.post("/register", (req, res) => {
-  let randomId = generateRandomString();
-  users[randomId] = { id: randomId,
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password
-  };
-  console.log(users);
-  res.cookie("username", req.body.username);
-  res.cookie("user_id", randomId)
-  res.redirect("/urls");
+  const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    res.status(400).send('400: Go back and enter a valid username, email, and password');
+  } else if (emailInUsers(email)) {
+    res.status(400).send('400: This email is already registered');
+  } else {
+    let randomId = generateRandomString();
+    users[randomId] = { id: randomId,
+      username: username,
+      email: email,
+      password: password
+    };
+    console.log(users);
+    res.cookie("username", username);
+    res.cookie("user_id", randomId)
+    res.redirect("/urls");
+  }
 });
 
 // app.get("/urls", (req, res) => {
