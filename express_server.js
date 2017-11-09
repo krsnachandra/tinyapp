@@ -42,6 +42,18 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+app.get("/register", (req, res) => {
+  let templateVars = {
+    urls: urlDatabase,
+    username: req.cookies['username']
+  };
+  res.render("urls_register", templateVars);
+});
+
+app.post("/register", (req, res) => {
+  res.cookie("username", req.body.username);
+  res.redirect("/urls");
+});
 
 // app.get("/urls", (req, res) => {
 //   res.render("urls_index", { urls: urlDatabase,

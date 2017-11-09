@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<body>
+    <!-- Add your EJS code here -->
+    <% if(!username) { %>
+      <form method="POST" action="/register">
+
+        <label for="username">Create a user name:</label>
+        <input id="username" type="text" name="username" placeholder="username" style="width: 300px">
+
+        <label><b>Email</b></label>
+        <input type="email" placeholder="Enter Email" name="email" required>
+
+        <label><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+
+        <input type="submit" value="Register">
+
+      </form>
+    <% } else { %>
+    <p>Hello <%= username %></p>
+      <form method="POST" action="/urls/logout">
+        <input type="submit" value="Logout">
+      </form>
+    <% } %>
+</body>
+</html>
