@@ -152,11 +152,15 @@ app.post("/urls/:id/delete", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = {
-    urls: urlDatabase,
-    user: users[req.cookies['user_id']]
-  };
-  res.render("urls_new", templateVars);
+  if (!(req.cookies['user_id'])) {
+    res.redirect("/urls/login");
+  } else {
+    let templateVars = {
+      urls: urlDatabase,
+      user: users[req.cookies['user_id']]
+    };
+    res.render("urls_new", templateVars);
+  }
 });
 
 app.get("/urls/:id", (req, res) => {
