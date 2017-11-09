@@ -6,11 +6,12 @@
 <body>
   <!-- Add your EJS code here -->
   <% if (!user) { %>
-    <form method="POST" action="/urls/login">
+    <a href="/login">Login</a>
+   <!--  <form method="POST" action="/login">
       <label for="username">Sign in with a user name:</label>
       <input id="username" type="text" name="username" placeholder="username" style="width: 300px">
       <input type="submit" value="Set Username">
-    </form>
+    </form> -->
   <% } else { %>
     <p>Hello <%= user.username %></p>
     <form method="POST" action="/urls/logout">

@@ -107,7 +107,11 @@ app.post("/register", (req, res) => {
 // });
 
 // Login
-app.post("/urls/login", (req, res) => {
+app.get("/login", (req, res) => {
+  res.render("urls_login");
+});
+
+app.post("/login", (req, res) => {
   // console.log(req.body);
   // console.log(req.params);
   // console.log(req.body.username);
