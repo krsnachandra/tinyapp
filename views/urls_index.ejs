@@ -6,14 +6,26 @@
 
 <body style="font-size:18px; padding:40px; font-family:'Helvetica', 'Arial', sans-serif">
     <% include partials/_header %>
-    <ul><% for(shortURL in urls) { %>
-      <li><%= shortURL + ": " %><%= urls[shortURL] %> <a href=<%= `/urls/${shortURL}` %>>Edit</a>
-        <form method="POST" action=<%= `/urls/${shortURL}/delete` %>>
-          <input type="submit" value="Delete">
-        </form>
-      </li>
-    <% } %>
-    <a href="/urls/new">Shortening a new URL</a>
-</ul>
+    <table align="left">
+      <tr align="left">
+        <th>Short URL --> </th>
+        <th>Long URL</th>
+        <th> </th>
+        <th> </th>
+      </tr>
+        <% for(shortURL in urls) { %>
+        <tr>
+          <td><a href=<%= `/u/${shortURL}` %>><%= shortURL %></a></td>
+          <td><%= urls[shortURL] %></td>
+          <td><a href=<%= `/urls/${shortURL}` %>>Edit</a></td>
+          <td>
+            <form method="POST" action=<%= `/urls/${shortURL}/delete` %>>
+              <input style="margin-bottom: 5px" type="submit" value="Delete">
+            </form>
+          </td>
+        <% } %>
+      </tr>
+      <tr><td> </td><td><a href="/urls/new">Click to shorten a new URL</a></td></tr>
+    </table>
 </body>
 </html>

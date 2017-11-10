@@ -14,7 +14,7 @@
     </form> -->
   <% } else { %>
     <p>Hello <%= user.username %> (<%= user.email %>)</p>
-    <form method="POST" action="/urls/logout">
+    <form method="POST" action="/urls/logout" style="margin-bottom:20px">
       <input type="submit" value="Logout">
     </form>
   <% } %>

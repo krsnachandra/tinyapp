@@ -6,11 +6,12 @@
 <body style="font-size:18px; padding:40px; font-family:'Helvetica', 'Arial', sans-serif">
     <% include partials/_header %>
     <p><a href="<%= longURL %>"><%= longURL %></a></p>
-    <p>Short URL: <%= shortURL %></p>
+    <p>Short URL: <a href=<%= `/u/${shortURL}` %>><%= shortURL %></a></p>
     <form method="POST" action=<%= `/urls/${shortURL}` %>>
       <label for="longURL">Enter the updated URL:</label>
       <input id="longURL" type="text" name="longURL" placeholder=<%= longURL %> style="width: 300px">
       <input type="submit" value="Update">
     </form>
+    <br><a href="/urls">See all your short URLs</a>
 </body>
 </html>
