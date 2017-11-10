@@ -7,8 +7,10 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const port = process.env.PORT || 8080; // default port 8080
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca",
+    userID: "1" },
+  "9sm5xK": { longURL: "http://www.google.com",
+    userID: "2" }
 };
 const users = {
   "1": {
@@ -145,10 +147,13 @@ app.post("/urls/logout", (req, res) => {
 });
 
 app.post("/urls/:id/delete", (req, res) => {
+  if (req.cookies['user_id'] === urlDatabase[req.params.id].userID) {
+    delete urlDatabase[req.params.id];
+    res.redirect("/urls");
+  } else {
+    res.send('That is not yours!')
+  }
   // console.log([req.params.id]);  // debug statement to see POST parameters
-  delete urlDatabase[req.params.id];
-  // console.log(urlDatabase);
-  res.redirect("/urls");
 });
 
 app.get("/urls/new", (req, res) => {
@@ -168,22 +173,23 @@ app.get("/urls/:id", (req, res) => {
     urls: urlDatabase,
     user: users[req.cookies['user_id']],
     shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id]
+    longURL: urlDatabase[req.params.id].longURL
   };
   res.render("urls_show", templateVars);
 });
 
-// Below is where the update magic happens:
+// Below is where the update/edit magic happens:
 app.post("/urls/:id", (req, res) => {
-  // console.log(req.params.id);  // debug statement to see POST parameters
-  // console.log(req.body);
-  urlDatabase[req.params.id] = req.body.longURL;
-  // console.log(urlDatabase);
+  if (req.cookies['user_id'] === urlDatabase[req.params.id].userID) {
+  urlDatabase[req.params.id].longURL = req.body.longURL;
   res.redirect("/urls");
+  } else {
+    res.send('That is not yours!')
+  }
 });
 
 app.get("/u/:id", (req, res) => {
-  let longURL = urlDatabase[req.params.id];
+  let longURL = urlDatabase[req.params.id.longURL];
   res.redirect(longURL);
 });
 
@@ -191,7 +197,8 @@ app.get("/u/:id", (req, res) => {
 app.post("/urls", (req, res) => {
   // console.log(req.body);  // debug statement to see POST parameters
   let shortURL = generateRandomString();
-  urlDatabase[shortURL] = req.body.longURL;
+  urlDatabase[shortURL] = { "longURL": req.body.longURL,
+    userID: req.cookies['user_id']};
   // console.log(urlDatabase);
   res.redirect(`http://localhost:8080/urls/${shortURL}`);
 });
