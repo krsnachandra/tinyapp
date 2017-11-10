@@ -7,7 +7,7 @@
 <body>
     <% include partials/_header %>
     <ul><% for(shortURL in urls) { %>
-      <li><%= shortURL + ": " %><%= urls[shortURL].longURL %> <a href=<%= `/urls/${shortURL}` %>>Edit</a>
+      <li><%= shortURL + ": " %><%= urls[shortURL] %> <a href=<%= `/urls/${shortURL}` %>>Edit</a>
         <form method="POST" action=<%= `/urls/${shortURL}/delete` %>>
           <input type="submit" value="Delete">
         </form>

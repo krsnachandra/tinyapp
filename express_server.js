@@ -16,7 +16,7 @@ const users = {
   "1": {
     id: "1",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: "p"
   },
  "2": {
     id: "2",
@@ -33,9 +33,6 @@ function generateRandomString() {
 
   return string;
 }
-
-
-
 function emailInUsers(passedEmail){
   for (let userID in users) {
     // console.log(users[userID].email);
@@ -44,7 +41,6 @@ function emailInUsers(passedEmail){
     }
   }
 }
-
 function findUserByEmail(passedEmail){
     for (let userID in users) {
     // console.log(users[userID].email);
@@ -53,8 +49,20 @@ function findUserByEmail(passedEmail){
     }
   }
 }
-// console.log(findUserByEmail("user2@example.com"));
-
+function urlsForUser(id, urlDatabase){
+  // console.log("I am actually running");
+  let myURLs = {};
+  for(let shortURL in urlDatabase) {
+    //for debugging: console.log('I am going through the for loop');
+    // console.log('I am comparing : ' + urlDatabase[shortURL]['userID'] + " and " + id);
+    if(urlDatabase[shortURL]['userID'] === id) {
+      // console.log('I am adding an object to myURLS');
+      myURLs[shortURL] = urlDatabase[shortURL].longURL
+    }
+  }
+  return myURLs;
+}
+// console.log(urlsForUser('2',urlDatabase));
 
 
 // Configuration
@@ -72,7 +80,7 @@ app.get("/urls.json", (req, res) => {
 app.get("/urls", (req, res) => {
   // console.log(req.cookies['user_id']);
   let templateVars = {
-    urls: urlDatabase,
+    urls: urlsForUser(req.cookies['user_id'], urlDatabase),
     user: users[req.cookies['user_id']]
   };
   // console.log(templateVars);
@@ -169,13 +177,17 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = {
-    urls: urlDatabase,
-    user: users[req.cookies['user_id']],
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id].longURL
-  };
-  res.render("urls_show", templateVars);
+  if (req.cookies['user_id'] === urlDatabase[req.params.id].userID) {
+    let templateVars = {
+      urls: urlDatabase,
+      user: users[req.cookies['user_id']],
+      shortURL: req.params.id,
+      longURL: urlDatabase[req.params.id].longURL
+    };
+    res.render("urls_show", templateVars);
+  }else {
+    res.send('That is not yours!')
+  }
 });
 
 // Below is where the update/edit magic happens:
@@ -188,12 +200,6 @@ app.post("/urls/:id", (req, res) => {
   }
 });
 
-app.get("/u/:id", (req, res) => {
-  let longURL = urlDatabase[req.params.id.longURL];
-  res.redirect(longURL);
-});
-
-
 app.post("/urls", (req, res) => {
   // console.log(req.body);  // debug statement to see POST parameters
   let shortURL = generateRandomString();
@@ -201,6 +207,11 @@ app.post("/urls", (req, res) => {
     userID: req.cookies['user_id']};
   // console.log(urlDatabase);
   res.redirect(`http://localhost:8080/urls/${shortURL}`);
+});
+
+app.get("/u/:id", (req, res) => {
+  let longURL = urlDatabase[req.params.id]['longURL'];
+  res.redirect(longURL);
 });
 
 app.get("/hello", (req, res) => {
