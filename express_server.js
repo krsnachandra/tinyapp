@@ -183,7 +183,7 @@ app.post("/urls/:id/delete", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   if (!(req.cookies['user_id'])) {
-    res.redirect("/urls/login");
+    res.redirect("/login");
   } else {
     let templateVars = {
       urls: urlDatabase,
