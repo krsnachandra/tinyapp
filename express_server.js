@@ -36,7 +36,6 @@ function generateRandomString() {
 }
 function emailInUsers(passedEmail){
   for (let userID in users) {
-    // console.log(users[userID].email);
     if (users[userID].email === passedEmail) {
       return true;
     }
@@ -44,26 +43,20 @@ function emailInUsers(passedEmail){
 }
 function findUserByEmail(passedEmail){
     for (let userID in users) {
-    // console.log(users[userID].email);
     if (users[userID].email === passedEmail) {
       return users[userID];
     }
   }
 }
 function urlsForUser(id, urlDatabase){
-  // console.log("I am actually running");
   let myURLs = {};
   for(let shortURL in urlDatabase) {
-    //for debugging: console.log('I am going through the for loop');
-    // console.log('I am comparing : ' + urlDatabase[shortURL]['userID'] + " and " + id);
     if(urlDatabase[shortURL]['userID'] === id) {
-      // console.log('I am adding an object to myURLS');
       myURLs[shortURL] = urlDatabase[shortURL].longURL
     }
   }
   return myURLs;
 }
-// console.log(urlsForUser('2',urlDatabase));
 const saltRounds = 10;
 
 
@@ -82,27 +75,17 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  // console.log(req.cookies['user_id']);
   let templateVars = {
-
-    //urls: urlsForUser(req.cookies['user_id'], urlDatabase),
     urls: urlsForUser(req.session.user_id, urlDatabase),
-
     user: users[req.session.user_id]
-    //user: users[req.cookies['user_id']]
   };
-  // console.log(templateVars);
   res.render("urls_index", templateVars);
 });
 
 app.get("/register", (req, res) => {
-  // console.log("checking");
-  // console.log(req.session.user_id);
   let templateVars = {
     urls: urlDatabase,
-    //user: users[req.cookies['user_id']]
   };
-  // console.log(templateVars.user);
   res.render("urls_register", templateVars);
 });
 
@@ -118,7 +101,6 @@ app.post("/register", (req, res) => {
 
     bcrypt.hash(password, saltRounds, function(err, hash) {
       // Store hash in your password DB.
-      // console.log("inside the bcrypt",hash);
       let randomId = generateRandomString();
       users[randomId] = {
         id: randomId,
@@ -126,27 +108,11 @@ app.post("/register", (req, res) => {
         email: email,
         password: hash
       };
-
-      console.log(users);
-       // res.cookie("username", username);
       req.session.user_id = randomId;
-      //res.cookie("user_id", randomId)
       res.redirect("/urls");
-
     })
-
-
-
-
-  } //else bracket ends here/
+  }
 });
-
-// app.get("/urls", (req, res) => {
-//   res.render("urls_index", { urls: urlDatabase,
-//     username: req.cookies["username"]
-//     }
-//   );
-// });
 
 // Login
 app.get("/login", (req, res) => {
@@ -159,8 +125,7 @@ app.post("/login", (req, res) => {
     res.status(403).send('403: user with that e-mail cannot be found');
   } else {
     let user = findUserByEmail(email);
-    if(!bcrypt.compareSync(password, user.password)){// returns false
-    //if (password !== user.password) {
+    if(!bcrypt.compareSync(password, user.password)) {
       res.status(403).send('403: password does not match');
     } else {
       req.session.user_id = user.id;
@@ -169,11 +134,8 @@ app.post("/login", (req, res) => {
   }
 });
 
-//Logout req.session = null
+//Logout
 app.post("/urls/logout", (req, res) => {
-  // console.log(req.body);
-  // console.log(req.params);
-  // console.log(req.body.username);
   req.session = null;
   res.redirect("/urls");
 });
@@ -185,7 +147,6 @@ app.post("/urls/:id/delete", (req, res) => {
   } else {
     res.send('That is not yours!')
   }
-  // console.log([req.params.id]);  // debug statement to see POST parameters
 });
 
 app.get("/urls/new", (req, res) => {
@@ -225,11 +186,9 @@ app.post("/urls/:id", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  // console.log(req.body);  // debug statement to see POST parameters
   let shortURL = generateRandomString();
   urlDatabase[shortURL] = { "longURL": req.body.longURL,
     userID: req.session.user_id};
-  // console.log(urlDatabase);
   res.redirect(`http://localhost:8080/urls/${shortURL}`);
 });
 
@@ -245,23 +204,6 @@ app.get("/hello", (req, res) => {
 app.get("/", (req, res) => {
   res.end("Hello!");
 });
-
-// test method
-// app.get("/test",(req,res)=>{
-  // console.log("this is a test route I created and it works");
-  // res.redirect("http://www.google.com");
-  // res.send("OK. Its great that you are understanding it");
-  // var person = {
-  //   id: "101",
-  //   name: "Chandra",
-  //   job: "Technical Architect",
-  //   salary: 90000000000
-  // };
-
-  // res.render("test", {data: person})
-// });
-/// test method ends here
-
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}!`);

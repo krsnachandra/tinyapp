@@ -13,7 +13,7 @@
       <input type="submit" value="Set Username">
     </form> -->
   <% } else { %>
-    <p>Hello <%= user.username %></p>
+    <p>Hello <%= user.username %> (<%= user.email %>)</p>
     <form method="POST" action="/urls/logout">
       <input type="submit" value="Logout">
     </form>
