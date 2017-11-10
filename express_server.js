@@ -2,6 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const bcrypt = require('bcrypt');
 
 // Constants
 const app = express();
@@ -63,6 +64,7 @@ function urlsForUser(id, urlDatabase){
   return myURLs;
 }
 // console.log(urlsForUser('2',urlDatabase));
+const saltRounds = 10;
 
 
 // Configuration
@@ -105,17 +107,31 @@ app.post("/register", (req, res) => {
   } else if (emailInUsers(email)) {
     res.status(400).send('400: This email is already registered');
   } else {
-    let randomId = generateRandomString();
-    users[randomId] = { id: randomId,
-      username: username,
-      email: email,
-      password: password
-    }
-    // console.log(users);
-    // res.cookie("username", username);
-    res.cookie("user_id", randomId)
-    res.redirect("/urls");
-  }
+
+
+
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+      // Store hash in your password DB.
+      console.log("inside the bcrypt",hash);
+      let randomId = generateRandomString();
+      users[randomId] = {
+        id: randomId,
+        username: username,
+        email: email,
+        password: hash
+      };
+
+      console.log(users);
+       // res.cookie("username", username);
+      res.cookie("user_id", randomId)
+      res.redirect("/urls");
+
+    })
+
+
+
+
+  } //else bracket ends here/
 });
 
 // app.get("/urls", (req, res) => {
@@ -136,7 +152,8 @@ app.post("/login", (req, res) => {
     res.status(403).send('403: user with that e-mail cannot be found');
   } else {
     let user = findUserByEmail(email);
-    if (password !== user.password) {
+    if(!bcrypt.compareSync(password, user.password)){// returns false
+    //if (password !== user.password) {
       res.status(403).send('403: password does not match');
     } else {
       res.cookie("user_id", user.id);
