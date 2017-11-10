@@ -4,7 +4,7 @@
   <title>TinyApp</title>
 </head>
 
-<body>
+<body style="font-size:18px; padding:40px; font-family:'Helvetica', 'Arial', sans-serif">
     <% include partials/_header %>
     <ul><% for(shortURL in urls) { %>
       <li><%= shortURL + ": " %><%= urls[shortURL] %> <a href=<%= `/urls/${shortURL}` %>>Edit</a>
