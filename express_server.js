@@ -73,14 +73,21 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
-  const templateVars = {
-    urls: urlsForUser(req.session.user_id, urlDatabase),
-    user: users[req.session.user_id],
-  };
-  res.render('urls_index', templateVars);
+  if (!req.session.user_id) {
+    res.status(404).send('404: You must login to see this page');
+  } else {
+    const templateVars = {
+      urls: urlsForUser(req.session.user_id, urlDatabase),
+      user: users[req.session.user_id],
+    };
+    res.render('urls_index', templateVars);
+  }
 });
 
 app.get('/register', (req, res) => {
+  if (req.session.user_id) {
+    res.redirect('/urls');
+  }
   const templateVars = {
     urls: urlDatabase,
   };
@@ -138,6 +145,10 @@ app.post('/urls/logout', (req, res) => {
 });
 
 app.post('/urls/:id/delete', (req, res) => {
+  if (!(req.params.id in urlDatabase)) {
+    res.status(404).send('404: Not found');
+    return;
+  }
   if (req.session.user_id === urlDatabase[req.params.id].userID) {
     delete urlDatabase[req.params.id];
     res.redirect('/urls');
@@ -192,6 +203,10 @@ app.post('/urls', (req, res) => {
 });
 
 app.get('/u/:id', (req, res) => {
+  if (!(req.params.id in urlDatabase)) {
+    res.status(404).send('404: Not found');
+    return;
+  }
   const { id } = req.params;
   const { longURL } = urlDatabase[id];
   res.redirect(longURL);
@@ -202,7 +217,7 @@ app.get('/hello', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.end('Hello!');
+  res.redirect('/login');
 });
 
 app.listen(port, () => {
