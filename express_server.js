@@ -87,6 +87,7 @@ app.get('/urls', (req, res) => {
 app.get('/register', (req, res) => {
   if (req.session.user_id) {
     res.redirect('/urls');
+    return;
   }
   const templateVars = {
     urls: urlDatabase,
@@ -120,6 +121,10 @@ app.post('/register', (req, res) => {
 
 // Login
 app.get('/login', (req, res) => {
+  if (req.session.user_id) {
+    res.redirect('/urls');
+    return;
+  }
   res.render('urls_login');
 });
 
@@ -153,7 +158,7 @@ app.post('/urls/:id/delete', (req, res) => {
     delete urlDatabase[req.params.id];
     res.redirect('/urls');
   } else {
-    res.send('That is not yours!');
+    res.send('Restricted access');
   }
 });
 
@@ -170,6 +175,10 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.get('/urls/:id', (req, res) => {
+  if (!(req.params.id in urlDatabase)) {
+    res.status(404).send('404: Not found');
+    return;
+  }
   if (req.session.user_id === urlDatabase[req.params.id].userID) {
     const templateVars = {
       urls: urlDatabase,
@@ -185,6 +194,10 @@ app.get('/urls/:id', (req, res) => {
 
 // Below is where the update/edit magic happens:
 app.post('/urls/:id', (req, res) => {
+  if (!(req.params.id in urlDatabase)) {
+    res.status(404).send('404: Not found');
+    return;
+  }
   if (req.session.user_id === urlDatabase[req.params.id].userID) {
     urlDatabase[req.params.id].longURL = req.body.longURL;
     res.redirect('/urls');
@@ -194,6 +207,10 @@ app.post('/urls/:id', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
+  if (!req.session.user_id) {
+    res.status(404).send('404: Not found');
+    return;
+  }
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = {
     longURL: req.body.longURL,
@@ -217,6 +234,10 @@ app.get('/hello', (req, res) => {
 });
 
 app.get('/', (req, res) => {
+  if (req.session.user_id) {
+    res.redirect('/urls');
+    return;
+  }
   res.redirect('/login');
 });
 
