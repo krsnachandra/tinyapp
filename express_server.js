@@ -146,7 +146,7 @@ app.post('/login', (req, res) => {
 // Logout
 app.post('/urls/logout', (req, res) => {
   req.session = null;
-  res.redirect('/urls');
+  res.redirect('/');
 });
 
 app.post('/urls/:id/delete', (req, res) => {
